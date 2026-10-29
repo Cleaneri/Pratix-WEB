@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pratix // Multi-Purpose Digital Utility Kit</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Stil Dosyası Bağlantısı -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- AYARLAR BUTONU VE PANELİ -->
+    <button class="settings-toggle-btn" onclick="toggleSettings()">⚙️</button>
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h3 data-i18n="settings">Settings</h3>
+            <button onclick="toggleSettings()">✕</button>
+        </div>
+        <div class="settings-body">
+            <!-- Dil Seçim Alanı -->
+            <div class="settings-group">
+                <label data-i18n="selectLanguage">Language:</label>
+                <select id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="de">Deutsch</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                </select>
+            </div>
+            <!-- Ses Seviyesi Alanı -->
+            <div class="settings-group">
+                <label data-i18n="soundVolume">Sound Volume:</label>
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.5" onchange="saveSettingsToStorage()">
+            </div>
+            <!-- Zil Sesi Seçim ve Deneme Alanı -->
+            <div class="settings-group">
+                <label data-i18n="selectAlarmSound">Alarm Sound:</label>
+                <div class="row" style="gap: 8px;">
+                    <select id="alarmSelect" onchange="changeAlarmSound(this.value)" style="flex: 1;">
+                        <option value="1">1 (Original)</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                    <button class="btn btn-sm" onclick="testAlarmSound()" style="padding: 10px; font-size: 1rem;">▶️</button>
+                </div>
+            </div>
+            <!-- YENİ: CANLI TEMA SEÇİM ALANI -->
+            <div class="settings-group">
+                <label data-i18n="selectTheme">Theme Style:</label>
+                <select id="themeSelect" onchange="changeThemePro(this.value)">
+                    <option value="original">Original (Default)</option>
+                    <option value="cyberpunk">Cyberpunk Neon</option>
+                    <option value="matrix">Matrix Code</option>
+                    <option value="nordic">Nordic Woods / Mocha</option>
+                    <option value="ocean">Deep Ocean</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR MENÜSÜ (QR KALDIRILDI) -->
+    <div class="sidebar">
+        <div class="logo-area">
+            <span class="logo-icon">🚀</span>
+            <span class="logo-text">Pratix</span>
+        </div>
+        <ul>
+            <li class="tab-btn active" onclick="switchTab('color-tool')" data-i18n="navColor">🎨 Color Converter</li>
+            <li class="tab-btn" onclick="switchTab('calc-tool')" data-i18n="navCalc">🧮 Calculator</li>
+            <li class="tab-btn" onclick="switchTab('timer-tool')" data-i18n="navTimer">⏱️ Timer</li>
+            <li class="tab-btn" onclick="switchTab('crypto-tool')" data-i18n="navCrypto">🔐 Password Gen</li>
+            <li class="tab-btn" onclick="switchTab('text-tool')" data-i18n="navText">📝 Text Analyzer</li>
+            <li class="tab-btn" onclick="switchTab('todo-tool')" data-i18n="navTodo">📝 To-Do List</li>
+            <li class="tab-btn" onclick="switchTab('pomodoro-tool')" data-i18n="navPomo">⏱️ Pomodoro</li>
+            <li class="tab-btn" onclick="switchTab('converter-tool')" data-i18n="navConverter">🔌 Unit Converter</li>
+            <li class="tab-btn" onclick="switchTab('compressor-tool')" data-i18n="navCompressor">🖼️ Image Compressor</li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <!-- 1. RENK VE PALET STÜDYOSU -->
+        <div id="color-tool" class="tab-content active">
+            <h2 data-i18n="colorTitle">Advanced Color & Palette Studio</h2>
+            <div class="card">
+                <label data-i18n="colorLabel">Select Color:</label>
+                <div class="row">
+                    <input type="color" id="colorPicker" value="#6366f1">
+                    <input type="text" id="hexOutput" value="#6366f1" readonly>
+                </div>
+                <div class="row">
+                    <div class="result-box" id="rgbOutput">rgb(99, 102, 241)</div>
+                    <div class="result-box" id="hslOutput">hsl(239, 84%, 67%)</div>
+                </div>
+                <button class="btn" onclick="copyColor()" data-i18n="colorBtn">Copy Code</button>
+                
+                <hr style="border-color:#374151; margin:10px 0;">
+                <h3 style="font-size:1rem;" data-i18n="paletteTitle">Random Palette Generator</h3>
+                <div class="palette-container" id="paletteContainer"></div>
+                <button class="btn btn-alt" onclick="generateRandomPalette()" data-i18n="paletteBtn">Generate Palette</button>
+            </div>
+        </div>
+
+        <!-- 2. HESAP MAKİNESİ (KLAVYE DESTEKLİ) -->
+        <div id="calc-tool" class="tab-content">
+            <h2 data-i18n="calcTitle">Modern Calculator</h2>
+            <div class="calculator">
+                <input type="text" id="calcDisplay" onkeydown="handleCalcKeyboard(event)">
+                <div class="calc-buttons">
+                    <button class="btn btn-alt" onclick="clearCalc()">C</button>
+                    <button class="btn btn-alt" onclick="pressCalc('**')">^</button>
+                    <button class="btn btn-alt" onclick="calcSpecial('sqrt')">√</button>
+                    <button class="btn btn-alt" onclick="pressCalc('/')">/</button>
+                    
+                    <button class="btn" onclick="pressCalc('7')">7</button>
+                    <button class="btn" onclick="pressCalc('8')">8</button>
+                    <button class="btn" onclick="pressCalc('9')">9</button>
+                    <button class="btn btn-alt" onclick="pressCalc('*')">*</button>
+                    
+                    <button class="btn" onclick="pressCalc('4')">4</button>
+                    <button class="btn" onclick="pressCalc('5')">5</button>
+                    <button class="btn" onclick="pressCalc('6')">6</button>
+                    <button class="btn btn-alt" onclick="pressCalc('-')">-</button>
+                    
+                    <button class="btn" onclick="pressCalc('1')">1</button>
+                    <button class="btn" onclick="pressCalc('2')">2</button>
+                    <button class="btn" onclick="pressCalc('3')">3</button>
+                    <button class="btn btn-alt" onclick="pressCalc('+')">+</button>
+                    
+                    <button class="btn" onclick="pressCalc('0')">0</button>
+                    <button class="btn" onclick="pressCalc('.')">.</button>
+                    <button class="btn btn-alt" onclick="calcSpecial('percent')">%</button>
+                    <button class="btn btn-action" onclick="calculateResult()">=</button>
+                </div>
+            </div>
+        </div>
+        <!-- 3. ZAMANLAYICI & KRONOMETRE -->
+        <div id="timer-tool" class="tab-content">
+            <h2 data-i18n="timerTitle">Timer & Stopwatch Studio</h2>
+            <div class="card" style="margin-bottom:20px;">
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div class="row">
+                    <input type="number" id="timerInput" placeholder="Seconds" data-i18n-holder="timerHolder" min="1">
+                    <button class="btn" onclick="startTimer()" data-i18n="timerStart">Start</button>
+                    <button class="btn btn-alt" onclick="resetTimer()" data-i18n="timerReset">Reset</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="timer-display" id="stopwatchDisplay" style="color:#10b981;">00:00.<span style="font-size:1.8rem;">00</span></div>
+                <div class="row">
+                    <button class="btn" style="background-color:#10b981;" onclick="startStopwatch()" id="swStartBtn" data-i18n="swStart">Start</button>
+                    <button class="btn btn-alt" onclick="lapStopwatch()" data-i18n="swLap">Lap</button>
+                    <button class="btn btn-alt" style="background-color:#ef4444;" onclick="resetStopwatch()" data-i18n="swReset">Reset</button>
+                </div>
+                <ul class="lap-list" id="lapList" style="margin-top: 10px;"></ul>
+            </div>
+        </div>
+
+        <!-- 4. ŞİFRE ÜRETİCİ -->
+        <div id="crypto-tool" class="tab-content">
+            <h2 data-i18n="cryptoTitle">Custom Password Architect</h2>
+            <div class="card">
+                <label><span data-i18n="cryptoLabel">Password Length:</span> (<span id="lenVal">16</span>)</label>
+                <input type="range" id="passLength" min="6" max="32" value="16" oninput="document.getElementById('lenVal').innerText=this.value">
+                
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="chkUpper" checked> <span data-i18n="optUpper">Uppercase Letters (A-Z)</span></label>
+                    <label><input type="checkbox" id="chkLower" checked> <span data-i18n="optLower">Lowercase Letters (a-z)</span></label>
+                    <label><input type="checkbox" id="chkNumbers" checked> <span data-i18n="optNumbers">Numbers (0-9)</span></label>
+                    <label><input type="checkbox" id="chkSymbols" checked> <span data-i18n="optSymbols">Symbols (!@#$)</span></label>
+                </div>
+                <button class="btn" onclick="generatePasswordPro()" data-i18n="cryptoBtn">Generate Secure Password</button>
+                <div class="result-box" id="passwordResult" style="font-size:1.2rem; font-weight:bold; color:#f59e0b;">- - - - - -</div>
+            </div>
+        </div>
+        <!-- 5. METİN ANALİZÖRÜ -->
+        <div id="text-tool" class="tab-content">
+            <h2 data-i18n="textTitle">Smart Text Analyzer</h2>
+            <div class="card">
+                <textarea id="textInput" placeholder="Type or paste your text here..." data-i18n-holder="textHolder" oninput="analyzeTextPro()"></textarea>
+                <div class="row">
+                    <div class="btn btn-sm btn-alt" onclick="transformText('upper')" data-i18n="btnUpper">UPPERCASE</div>
+                    <div class="btn btn-sm btn-alt" onclick="transformText('lower')" data-i18n="btnLower">lowercase</div>
+                    <div class="btn btn-sm btn-alt" style="background-color:#ef4444;" onclick="document.getElementById('textInput').value=''; analyzeTextPro();" data-i18n="btnClear">Clear</div>
+                </div>
+                <div class="counter-grid" style="margin-top: 15px;">
+                    <div class="counter-badge"><span data-i18n="textChar">Characters</span><span id="charCount">0</span></div>
+                    <div class="counter-badge"><span data-i18n="textWord">Words</span><span id="wordCount">0</span></div>
+                    <div class="counter-badge" style="grid-column: span 2;"><span data-i18n="textReadTime">Estimated Read Time</span><span id="readTimeCount" style="color:#f59e0b;">0s</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. AKILLI YAPILACAKLAR LİSTESİ (TO-DO LIST) -->
+        <div id="todo-tool" class="tab-content">
+            <h2 data-i18n="todoTitle">Smart To-Do List</h2>
+            <div class="card">
+                <div class="row">
+                    <input type="text" id="todoInput" placeholder="Add a new task..." data-i18n-holder="todoHolder">
+                    <button class="btn" onclick="addTodo()" data-i18n="todoAddBtn">Add</button>
+                </div>
+                
+                <!-- Filtreleme Butonları -->
+                <div class="row" style="margin-top: 10px; justify-content: center; gap: 8px;">
+                    <button class="btn btn-sm" onclick="filterTodos('all')" data-i18n="todoAll">All</button>
+                    <button class="btn btn-sm btn-alt" onclick="filterTodos('active')" data-i18n="todoActive">Active</button>
+                    <button class="btn btn-sm btn-alt" onclick="filterTodos('completed')" data-i18n="todoCompleted">Completed</button>
+                </div>
+
+                <!-- Görevlerin Listeleneceği Alan -->
+                <ul id="todoList" style="list-style: none; margin-top: 15px; padding: 0; display: flex; flex-direction: column; gap: 10px;"></ul>
+            </div>
+        </div>
+        <!-- 7. GEÇMİŞ KAYITLI POMODORO ZAMANLAYICI -->
+        <div id="pomodoro-tool" class="tab-content">
+            <h2 data-i18n="pomoTitle">Smart Pomodoro Timer</h2>
+            
+            <!-- Sayaç Kartı -->
+            <div class="card" style="margin-bottom:20px;">
+                <div class="timer-display" id="pomoDisplay">25:00</div>
+                <div class="row" style="justify-content: center; gap: 10px;">
+                    <button class="btn btn-sm" onclick="setPomoMode('work')" data-i18n="pomoWork">Focus (25m)</button>
+                    <button class="btn btn-sm btn-alt" onclick="setPomoMode('break')" data-i18n="pomoBreak">Break (5m)</button>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <button class="btn" style="width: 100%;" onclick="startPomo()" id="pomoStartBtn" data-i18n="pomoStart">Start</button>
+                    <button class="btn btn-alt" onclick="resetPomo()" data-i18n="pomoReset">Reset</button>
+                </div>
+            </div>
+
+            <!-- Kalıcı Geçmiş Kayıt Kartı -->
+            <div class="card">
+                <h3 style="font-size:1rem;" data-i18n="pomoLogTitle">Focus History (Saved)</h3>
+                <ul class="lap-list" id="pomoLogList" style="margin-top: 10px; max-height: 150px; overflow-y: auto;"></ul>
+                <button class="btn btn-sm btn-alt" style="background-color:#ef4444; margin-top: 10px; width: 100%;" onclick="clearPomoHistory()" data-i18n="pomoClearLog">Clear History</button>
+            </div>
+        </div>
+        <!-- 8. GELİŞMİŞ BİRİM DÖNÜŞTÜRÜCÜ (UNIT CONVERTER) -->
+        <div id="converter-tool" class="tab-content">
+            <h2 data-i18n="converterTitle">Advanced Unit Converter</h2>
+            <div class="card">
+                <!-- Kategori Seçimi -->
+                <div class="settings-group">
+                    <label data-i18n="converterCategory">Select Category:</label>
+                    <select id="converterCategorySelect" onchange="updateConverterUnits()">
+                        <option value="data">📁 Digital Data (MB, GB, TB...)</option>
+                        <option value="length">📏 Length (Meter, Inch, Mile...)</option>
+                        <option value="temp">🌡️ Temperature (Celsius, Fahrenheit...)</option>
+                    </select>
+                </div>
+
+                <!-- Giriş Değeri ve Birimi -->
+                <div class="row">
+                    <input type="number" id="converterInputVal" value="1" oninput="calculateConversionPro()">
+                    <select id="converterFromUnit" onchange="calculateConversionPro()" style="width: 140px;"></select>
+                </div>
+
+                <div style="text-align: center; font-size: 1.2rem; color: var(--accent); font-weight: bold; margin: -5px 0;">⬇️</div>
+
+                <!-- Sonuç Değeri ve Birimi -->
+                <div class="row">
+                    <input type="text" id="converterOutputVal" value="1024" readonly style="color: #10b981; font-weight: bold;">
+                    <select id="converterToUnit" onchange="calculateConversionPro()" style="width: 140px;"></select>
+                </div>
+            </div>
+        <!-- 9. GÖRSEL SIKIŞTIRICI & BOYUTLANDIRICI (IMAGE COMPRESSOR) -->
+        <div id="compressor-tool" class="tab-content">
+            <h2 data-i18n="compTitle">Image Resizer & Compressor</h2>
+            
+            <!-- Giriş Alanı Kartı -->
+            <div class="card" style="margin-bottom:20px;">
+                <button class="btn" onclick="document.getElementById('compFileInput').click()" style="width: 100%;" data-i18n="compUploadBtn">Choose Image (.jpg, .png)</button>
+                <input type="file" id="compFileInput" accept="image/jpeg, image/png" style="display: none;" onchange="handleCompFileSelect(event)">
+                <div id="compFileInfo" style="font-size: 0.85rem; color: var(--text-muted); text-align: center; display: none;"></div>
+            </div>
+
+            <!-- Kontrol ve Ayar Kartı (Görsel yüklenince açılır) -->
+            <div class="card" id="compSettingsCard" style="display: none;">
+                <div class="row" style="flex-direction: column; gap: 5px;">
+                    <label><span data-i18n="compQuality">Compression Quality:</span> (<span id="compQualVal">80</span>%)</label>
+                    <input type="range" id="compQualitySlider" min="10" max="100" value="80" oninput="document.getElementById('compQualVal').innerText=this.value; compressImagePro();">
+                </div>
+
+                <div class="row">
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="compWidth">Width (px):</label>
+                        <input type="number" id="compWidthInput" oninput="handleDimensionChange('width')">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="compHeight">Height (px):</label>
+                        <input type="number" id="compHeightInput" oninput="handleDimensionChange('height')">
+                    </div>
+                </div>
+
+                <!-- Boyut Karşılaştırma Rozetleri -->
+                <div class="counter-grid" style="margin-top: 5px;">
+                    <div class="counter-badge"><span data-i18n="compOriginalSize">Original Size</span><span id="compOrigSizeText" style="color: var(--text-muted); font-size:1.3rem;">0 KB</span></div>
+                    <div class="counter-badge"><span data-i18n="compNewSize">Compressed Size</span><span id="compNewSizeText" style="color: #10b981; font-size:1.3rem;">0 KB</span></div>
+                </div>
+
+                <button class="btn btn-action" style="width: 100%; margin-top: 5px;" onclick="downloadCompressedImg()" data-i18n="compDownloadBtn">Download Compressed Image</button>
+            </div>
+        </div>
+
+    </div> <!-- .main-content kapanışı -->
+
+    <script src="app.js"></script>
+</body>
+</html>

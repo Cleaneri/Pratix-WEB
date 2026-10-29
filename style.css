@@ -1,0 +1,495 @@
+/* ==========================================================================
+   🚀 PRATIX PRO - DİNAMİK RENK DEĞİŞKENLERİ VE GENEL RESET (PARÇA 1)
+   ========================================================================== */
+
+:root {
+    /* JavaScript Tema Motoru tarafından anlık olarak güncellenen ana renk kökleri */
+    --bg-main: #0b0f19;
+    --bg-sidebar: #111827;
+    --bg-card: #1f2937;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --text-main: #f9fafb;
+    --text-muted: #9ca3af;
+    --border-radius: 12px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- ANA İÇERİK MİMARİSİ --- */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.tab-content {
+    display: none;
+    width: 100%;
+    max-width: 600px;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 { margin-bottom: 20px; }
+/* ==========================================================================
+   🚀 PRATIX PRO - AYARLAR PANELİ VE SOL MENÜ TASARIMI (PARÇA 2)
+   ========================================================================== */
+
+/* --- AYARLAR PANELİ --- */
+.settings-toggle-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid #374151;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+.settings-toggle-btn:hover {
+    transform: rotate(45deg);
+    background-color: #374151;
+}
+
+.settings-panel {
+    position: fixed;
+    top: 80px;
+    right: -320px;
+    width: 300px;
+    background: var(--bg-card);
+    border: 1px solid #374151;
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s;
+    overflow: hidden;
+}
+
+.settings-panel.open {
+    right: 20px;
+}
+
+.settings-header {
+    background: #111827;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #374151;
+}
+
+.settings-header button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.settings-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.settings-group select, .settings-group input[type="range"] {
+    width: 100%;
+    padding: 10px;
+    background: #111827;
+    border: 1px solid #4b5563;
+    border-radius: 6px;
+    color: white;
+    outline: none;
+}
+
+/* --- SIDEBAR & LOGO --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--bg-sidebar);
+    padding: 30px 15px;
+    border-right: 1px solid #2d3748;
+    transition: background-color 0.3s ease;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 35px;
+    padding-left: 10px;
+}
+
+.logo-icon { font-size: 1.6rem; }
+
+.logo-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: white;
+    background: linear-gradient(to right, #ffffff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sidebar ul { list-style: none; }
+
+.sidebar li {
+    padding: 12px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    color: var(--text-muted);
+}
+
+.sidebar li:hover, .sidebar li.active {
+    background-color: var(--accent);
+    color: white;
+}
+/* ==========================================================================
+   🚀 PRATIX PRO - KARTLAR, FORMLAR, BUTONLAR VE RENK BİLEŞENLERİ (PARÇA 3)
+   ========================================================================== */
+
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid #374151;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+/* --- FORMLAR VE BUTONLAR --- */
+input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    padding: 12px;
+    background-color: #111827;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+    border-color: var(--accent);
+}
+
+input[type="color"] {
+    width: 80px;
+    height: 50px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+textarea {
+    height: 150px;
+    resize: none;
+}
+
+.btn {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover { background-color: var(--accent-hover); }
+.btn:active { transform: scale(0.97); }
+.btn-alt { background-color: #4b5563; }
+.btn-alt:hover { background-color: #374151; }
+.btn-sm { padding: 8px 12px; font-size: 0.85rem; }
+
+.result-box {
+    flex: 1;
+    background-color: #111827;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px dashed #4b5563;
+    text-align: center;
+    font-family: monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- PALET VE SEÇENEKLER --- */
+.palette-container {
+    display: flex;
+    gap: 8px;
+    height: 60px;
+    width: 100%;
+}
+
+.palette-color {
+    flex: 1;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.palette-color:hover {
+    transform: scale(1.05);
+}
+/* ==========================================================================
+   🚀 PRATIX PRO - HESAP MAKİNESİ, TO-DO VE POMODORO STİLLERİ (PARÇA 4)
+   ========================================================================== */
+
+/* --- HESAP MAKİNESİ MODÜLÜ --- */
+.calculator {
+    background-color: var(--bg-card);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid #374151;
+    width: 100%;
+}
+
+#calcDisplay {
+    font-size: 1.6rem;
+    text-align: right;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.btn-action {
+    background-color: #10b981;
+    grid-row: span 1;
+}
+.btn-action:hover { background-color: #059669; }
+
+/* --- ŞİFRE SEÇENEK GRUPLARI --- */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #111827;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+/* --- DİĞER ÖZEL PANEL ELEMENTLERİ --- */
+.timer-display {
+    font-size: 3.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--accent);
+    transition: color 0.3s ease;
+}
+
+.counter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.counter-badge {
+    background: #111827;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.counter-badge span:last-child {
+    display: block;
+    font-size: 1.8rem;
+    color: var(--accent);
+    font-weight: bold;
+    margin-top: 5px;
+    transition: color 0.3s ease;
+}
+
+/* --- TO-DO LIST PRO STİLLERİ --- */
+.todo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111827;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    transition: all 0.2s ease;
+}
+
+.todo-item.completed span {
+    text-decoration: line-through;
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.todo-item span {
+    cursor: pointer;
+    flex: 1;
+    word-break: break-all;
+    padding-right: 15px;
+    font-size: 0.95rem;
+    user-select: none;
+}
+
+.todo-delete-btn {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0 5px;
+    transition: transform 0.1s ease, opacity 0.2s;
+    opacity: 0.8;
+}
+
+.todo-delete-btn:hover {
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+/* --- SCROLL VE GEÇMİŞ LİSTELERİ --- */
+.lap-list, #pomoLogList {
+    list-style: none;
+    max-height: 150px;
+    overflow-y: auto;
+    background: #111827;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #1f2937;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lap-list li, #pomoLogList li {
+    padding: 8px 10px;
+    border-bottom: 1px solid #1f2937;
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+
+.lap-list li:last-child, #pomoLogList li:last-child {
+    border-bottom: none;
+}
+
+.lap-list::-webkit-scrollbar, #pomoLogList::-webkit-scrollbar {
+    width: 6px;
+}
+
+.lap-list::-webkit-scrollbar-track, #pomoLogList::-webkit-scrollbar-track {
+    background: #111827;
+    border-radius: 8px;
+}
+
+.lap-list::-webkit-scrollbar-thumb, #pomoLogList::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 8px;
+}
+
+.lap-list::-webkit-scrollbar-thumb:hover, #pomoLogList::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+/* ==========================================================================
+   🔌 PRATIX PRO - BİRİM DÖNÜŞTÜRÜCÜ (UNIT CONVERTER) EK STILLERI
+   ========================================================================== */
+
+/* Dönüştürücü içindeki select kutularının form elemanlarıyla tam uyumlu olması için */
+#converter-tool select {
+    width: 100%;
+    padding: 12px;
+    background-color: #111827;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+#converter-tool select:focus {
+    border-color: var(--accent);
+}
+
+/* Kategori seçim alanı ile giriş alanları arasına şık bir boşluk bırakma */
+#converter-tool .settings-group {
+    margin-bottom: 5px;
+}
+
+/* Sayı giriş alanları ile select kutularının yan yana dengeli durması */
+#converter-tool .row {
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Birim seçilen yan kutuların genişlik ayarı */
+#converterFromUnit, #converterToUnit {
+    flex: 0 0 160px; /* Sabit genişlik vererek sayı alanına daha çok yer açar */
+}
+
+/* Sonuç çıktısını veren alt input alanının arka planını daha belirgin yapma */
+#converterOutputVal {
+    background-color: #0f172a !important; /* Çıktı alanını vurgulamak için hafif farklı bir ton */
+    cursor: not-allowed; /* Düzenlenemez olduğunu belirtmek için imleç stili */
+}
+
